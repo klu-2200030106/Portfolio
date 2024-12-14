@@ -1,40 +1,64 @@
+import { useState } from 'react';
+import './Footer.css';
 
-function Footer() {
+const Footer = () => {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const socialLinks = [
+    { 
+      name: 'LinkedIn', 
+      url: 'https://linkedin.com', 
+      icon: '🔗',
+      color: '#0077B5'
+    },
+    { 
+      name: 'GitHub', 
+      url: 'https://github.com', 
+      icon: '💻',
+      color: '#333'
+    },
+    { 
+      name: 'Twitter', 
+      url: 'https://twitter.com', 
+      icon: '🐦',
+      color: '#1DA1F2'
+    }
+  ];
+
   return (
-    <footer className="bg-gray-800 text-white py-6">
-      <div className="container mx-auto px-4 text-center">
-        <div className="flex justify-center space-x-6 mb-4">
-          <a 
-            href="https://linkedin.com" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hover:text-blue-500 transition duration-300"
-          >
-            LinkedIn
-          </a>
-          <a 
-            href="https://github.com" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hover:text-blue-500 transition duration-300"
-          >
-            GitHub
-          </a>
-          <a 
-            href="https://twitter.com" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hover:text-blue-500 transition duration-300"
-          >
-            Twitter
-          </a>
+    <footer className={`advanced-footer ${isHovered ? 'footer-hover' : ''}`}>
+      <div className="footer-container">
+        <div 
+          className="footer-social-links"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+        >
+          {socialLinks.map((link, index) => (
+            <a 
+              key={link.name}
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-social-link"
+              style={{
+                '--footer-link-color': link.color,
+                '--footer-delay': `${index * 0.1}s`
+              }}
+            >
+              <span className="footer-social-icon">{link.icon}</span>
+              {link.name}
+            </a>
+          ))}
         </div>
-        <p className="text-gray-400">
-          © 2024 Your Name. All Rights Reserved.
-        </p>
+        <div className="footer-copyright-section">
+          <p>
+            © {new Date().getFullYear()} Your Name. 
+            <span className="footer-trademark">™</span> All Rights Reserved.
+          </p>
+        </div>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;
