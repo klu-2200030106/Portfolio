@@ -1,73 +1,76 @@
 import { useState } from 'react';
+import './Contact.css';
 
-function Contact() {
+const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    message: '',
   });
 
   const [formState, setFormState] = useState({
     isFocused: {},
-    isValid: {}
+    isValid: {},
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
 
     // Basic validation
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
       isValid: {
         ...prev.isValid,
-        [name]: value.trim().length > 0
-      }
+        [name]: value.trim().length > 0,
+      },
     }));
   };
 
   const handleFocus = (name) => {
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
       isFocused: {
         ...prev.isFocused,
-        [name]: true
-      }
+        [name]: true,
+      },
     }));
   };
 
   const handleBlur = (name) => {
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...prev,
       isFocused: {
         ...prev.isFocused,
-        [name]: false
-      }
+        [name]: false,
+      },
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     // Basic form validation
-    const isFormValid = Object.values(formData).every(field => field.trim().length > 0);
-    
+    const isFormValid = Object.values(formData).every(
+      (field) => field.trim().length > 0
+    );
+
     if (isFormValid) {
       alert('Message sent!');
-      
+
       // Clear form data
       setFormData({
         name: '',
         email: '',
-        message: ''
+        message: '',
       });
 
       // Reset form state validation
       setFormState({
         isFocused: {},
-        isValid: {}
+        isValid: {},
       });
     } else {
       alert('Please fill out all fields');
@@ -75,16 +78,19 @@ function Contact() {
   };
 
   return (
-    <div style={styles.contactContainer}>
-      <div style={styles.formWrapper}>
-        <h2 style={styles.formTitle}>Contact Me</h2>
-        <form onSubmit={handleSubmit} style={styles.contactForm}>
-          <div style={styles.formGroup}>
-            <label 
-              style={{
-                ...styles.formLabel,
-                ...(formState.isFocused.name ? styles.labelFocused : {})
-              }}
+    <div className="container">
+      <div className="contact-form">
+        <h1>Contact me</h1>
+        <p>
+          Want to connect? My inbox is always open! You can also reach me on
+          social media.
+        </p>
+        <form onSubmit={handleSubmit} className="contact-form">
+          <div className="form-group">
+            <label
+              className={`form-label ${
+                formState.isFocused.name ? 'label-focused' : ''
+              }`}
             >
               Name
             </label>
@@ -95,21 +101,22 @@ function Contact() {
               onChange={handleChange}
               onFocus={() => handleFocus('name')}
               onBlur={() => handleBlur('name')}
-              style={{
-                ...styles.formInput,
-                ...(formState.isFocused.name ? styles.inputFocused : {}),
-                ...(formState.isValid.name === false ? styles.inputInvalid : {})
-              }}
+              className={`form-input ${
+                formState.isFocused.name
+                  ? 'input-focused'
+                  : formState.isValid.name === false
+                  ? 'input-invalid'
+                  : ''
+              }`}
               required
             />
           </div>
 
-          <div style={styles.formGroup}>
-            <label 
-              style={{
-                ...styles.formLabel,
-                ...(formState.isFocused.email ? styles.labelFocused : {})
-              }}
+          <div className="form-group">
+            <label
+              className={`form-label ${
+                formState.isFocused.email ? 'label-focused' : ''
+              }`}
             >
               Email
             </label>
@@ -120,21 +127,22 @@ function Contact() {
               onChange={handleChange}
               onFocus={() => handleFocus('email')}
               onBlur={() => handleBlur('email')}
-              style={{
-                ...styles.formInput,
-                ...(formState.isFocused.email ? styles.inputFocused : {}),
-                ...(formState.isValid.email === false ? styles.inputInvalid : {})
-              }}
+              className={`form-input ${
+                formState.isFocused.email
+                  ? 'input-focused'
+                  : formState.isValid.email === false
+                  ? 'input-invalid'
+                  : ''
+              }`}
               required
             />
           </div>
 
-          <div style={styles.formGroup}>
-            <label 
-              style={{
-                ...styles.formLabel,
-                ...(formState.isFocused.message ? styles.labelFocused : {})
-              }}
+          <div className="form-group">
+            <label
+              className={`form-label ${
+                formState.isFocused.message ? 'label-focused' : ''
+              }`}
             >
               Message
             </label>
@@ -144,107 +152,47 @@ function Contact() {
               onChange={handleChange}
               onFocus={() => handleFocus('message')}
               onBlur={() => handleBlur('message')}
-              style={{
-                ...styles.formInput,
-                ...styles.formTextarea,
-                ...(formState.isFocused.message ? styles.inputFocused : {}),
-                ...(formState.isValid.message === false ? styles.inputInvalid : {})
-              }}
+              className={`form-input form-textarea ${
+                formState.isFocused.message
+                  ? 'input-focused'
+                  : formState.isValid.message === false
+                  ? 'input-invalid'
+                  : ''
+              }`}
               rows="4"
               required
             ></textarea>
           </div>
 
-          <button type="submit" style={styles.submitButton}>
+          <button type="submit" className="submit-button">
             Send Message
           </button>
         </form>
+        <div className="social-links">
+          <a href="https://wa.me/+123456789" target="_blank" rel="noopener noreferrer">
+            <i className="fab fa-whatsapp"></i>
+          </a>
+          <a href="https://instagram.com/your_username" target="_blank" rel="noopener noreferrer">
+            <i className="fab fa-instagram"></i>
+          </a>
+          <a href="https://linkedin.com/in/your_username" target="_blank" rel="noopener noreferrer">
+            <i className="fab fa-linkedin-in"></i>
+          </a>
+          <a href="https://t.me/your_username" target="_blank" rel="noopener noreferrer">
+            <i className="fab fa-telegram"></i>
+          </a>
+        </div>
+      </div>
+      <div className="map">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15274.362455431207!2d79.56935457499999!3d14.153722550000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bb63e9eb9d5ffe5%3A0x16a01c3d5e9e2cf8!2sAravind%2C%20Tenali%2C%20Andhra%20Pradesh!5e0!3m2!1sen!2sin!4v1684177546907!5m2!1sen!2sin"
+          allowFullScreen=""
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
       </div>
     </div>
   );
-}
-
-// Updated styles with background image
-const styles = {
-  contactContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    minHeight: '100vh',
-    backgroundImage: 'url("cc.avif")', // Placeholder background image
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    backgroundBlendMode: 'overlay',
-    padding: '4rem'
-  },
-  formWrapper: {
-    width: '100%',
-    maxWidth: '500px',
-    borderRadius: '1rem',
-    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-    padding: '2.5rem',
-    transition: 'all 0.3s ease'
-  },
-  formTitle: {
-    textAlign: 'center',
-    color: '#2563eb',
-    marginBottom: '2rem',
-    fontSize: '2.25rem',
-    position: 'relative'
-  },
-  contactForm: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1.5rem'
-  },
-  formGroup: {
-    position: 'relative'
-  },
-  formLabel: {
-    display: 'block',
-    marginBottom: '0.5rem',
-    color: '#4b5563',
-    transition: 'color 0.3s ease'
-  },
-  labelFocused: {
-    color: '#3b82f6'
-  },
-  formInput: {
-    width: '100%',
-    padding: '0.75rem 1rem',
-    border: '2px solid #e5e7eb',
-    borderRadius: '0.5rem',
-    fontSize: '1rem',
-    transition: 'all 0.3s ease',
-    outline: 'none',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)' // Slightly transparent input backgrounds
-  },
-  inputFocused: {
-    borderColor: '#3b82f6',
-    boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.2)'
-  },
-  inputInvalid: {
-    borderColor: '#ef4444',
-    boxShadow: '0 0 0 3px rgba(239, 68, 68, 0.2)'
-  },
-  formTextarea: {
-    resize: 'vertical',
-    minHeight: '120px'
-  },
-  submitButton: {
-    width: '100%',
-    padding: '1rem',
-    background: 'linear-gradient(to right, #3b82f6, #6366f1)',
-    color: '#ffffff',
-    border: 'none',
-    borderRadius: '0.5rem',
-    fontSize: '1.125rem',
-    fontWeight: 'bold',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    position: 'relative',
-    overflow: 'hidden'
-  }
 };
 
 export default Contact;
