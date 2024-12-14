@@ -1,5 +1,14 @@
 import { useState } from 'react';
-import './Contact.css';
+import { 
+  FaWhatsapp, 
+  FaInstagram, 
+  FaLinkedin, 
+  FaTelegramPlane, 
+  FaUser, 
+  FaEnvelope, 
+  FaComment, 
+  FaPaperPlane 
+} from 'react-icons/fa';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -11,185 +20,257 @@ const Contact = () => {
   const [formState, setFormState] = useState({
     isFocused: {},
     isValid: {},
+    isSubmitting: false,
   });
+
+  const styles = {
+    container: {
+      background: 'linear-gradient(135deg, #f5f7fa 0%, #f5f7fa 100%)',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      padding: '4rem 0',
+      fontFamily: '"Poppins", sans-serif',
+    },
+    card: {
+      backgroundColor: 'white',
+      borderRadius: '20px',
+      boxShadow: '0 15px 35px rgba(50, 50, 93, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07)',
+      overflow: 'hidden',
+      transition: 'all 0.3s ease',
+    },
+    cardHover: {
+      transform: 'translateY(-10px)',
+      boxShadow: '0 20px 40px rgba(50, 50, 93, 0.15), 0 8px 20px rgba(0, 0, 0, 0.1)',
+    },
+    inputGroup: {
+      position: 'relative',
+      marginBottom: '1.5rem',
+    },
+    input: {
+      borderRadius: '12px',
+      padding: '0.75rem 1rem 0.75rem 3rem',
+      border: '2px solid #e6e6e6',
+      transition: 'all 0.3s ease',
+      backgroundColor: '#f9f9f9',
+    },
+    inputFocus: {
+      borderColor: '#6a11cb',
+      boxShadow: '0 0 0 3px rgba(106, 17, 203, 0.2)',
+    },
+    inputIcon: {
+      position: 'absolute',
+      left: '15px',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      color: '#6a11cb',
+      opacity: 0.7,
+    },
+    submitButton: {
+      background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
+      color: 'white',
+      borderRadius: '12px',
+      padding: '0.75rem 1.5rem',
+      border: 'none',
+      fontWeight: '600',
+      transition: 'all 0.3s ease',
+    },
+    socialLinks: {
+      display: 'flex',
+      justifyContent: 'center',
+      gap: '1.5rem',
+      marginTop: '2rem',
+    },
+    socialIcon: {
+      color: '#6a11cb',
+      transition: 'transform 0.3s ease, color 0.3s ease',
+    },
+    socialIconHover: {
+      transform: 'scale(1.2)',
+      color: '#2575fc',
+    },
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-
-    // Basic validation
-    setFormState((prev) => ({
+    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormState(prev => ({
       ...prev,
-      isValid: {
-        ...prev.isValid,
-        [name]: value.trim().length > 0,
-      },
-    }));
-  };
-
-  const handleFocus = (name) => {
-    setFormState((prev) => ({
-      ...prev,
-      isFocused: {
-        ...prev.isFocused,
-        [name]: true,
-      },
-    }));
-  };
-
-  const handleBlur = (name) => {
-    setFormState((prev) => ({
-      ...prev,
-      isFocused: {
-        ...prev.isFocused,
-        [name]: false,
-      },
+      isValid: { ...prev.isValid, [name]: value.trim().length > 0 }
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Basic form validation
-    const isFormValid = Object.values(formData).every(
-      (field) => field.trim().length > 0
-    );
+    setFormState(prev => ({ ...prev, isSubmitting: true }));
+
+    const isFormValid = Object.values(formData).every(field => field.trim().length > 0);
 
     if (isFormValid) {
-      alert('Message sent!');
-
-      // Clear form data
-      setFormData({
-        name: '',
-        email: '',
-        message: '',
-      });
-
-      // Reset form state validation
-      setFormState({
-        isFocused: {},
-        isValid: {},
-      });
+      // Simulate form submission
+      setTimeout(() => {
+        alert('Message sent successfully!');
+        setFormData({ name: '', email: '', message: '' });
+        setFormState({ isFocused: {}, isValid: {}, isSubmitting: false });
+      }, 1500);
     } else {
       alert('Please fill out all fields');
+      setFormState(prev => ({ ...prev, isSubmitting: false }));
     }
   };
 
+  const socialLinks = [
+    { 
+      name: 'WhatsApp', 
+      href: 'https://wa.me/+123456789', 
+      icon: FaWhatsapp 
+    },
+    { 
+      name: 'Instagram', 
+      href: 'https://instagram.com/your_username', 
+      icon: FaInstagram 
+    },
+    { 
+      name: 'LinkedIn', 
+      href: 'https://linkedin.com/in/your_username', 
+      icon: FaLinkedin 
+    },
+    { 
+      name: 'Telegram', 
+      href: 'https://t.me/your_username', 
+      icon: FaTelegramPlane 
+    }
+  ];
+
   return (
-    <div className="container">
-      <div className="contact-form">
-        <h1>Contact me</h1>
-        <p>
-          Want to connect? My inbox is always open! You can also reach me on
-          social media.
-        </p>
-        <form onSubmit={handleSubmit} className="contact-form">
-          <div className="form-group">
-            <label
-              className={`form-label ${
-                formState.isFocused.name ? 'label-focused' : ''
-              }`}
-            >
-              Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              onFocus={() => handleFocus('name')}
-              onBlur={() => handleBlur('name')}
-              className={`form-input ${
-                formState.isFocused.name
-                  ? 'input-focused'
-                  : formState.isValid.name === false
-                  ? 'input-invalid'
-                  : ''
-              }`}
-              required
-            />
-          </div>
+    <div className="container" style={styles.container}>
+      <div className="row justify-content-center">
+        <div className="col-lg-10 col-xl-8">
+          <div 
+            className="card" 
+            style={styles.card}
+            onMouseEnter={(e) => e.currentTarget.style.transform = styles.cardHover.transform}
+            onMouseLeave={(e) => e.currentTarget.style.transform = 'none'}
+          >
+            <div className="card-body p-5">
+              <h2 className="text-center mb-4" style={{ 
+                background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent' 
+              }}>
+                Contact Me
+              </h2>
+              <p className="text-center text-muted mb-5">
+                Got a project? Lets talk! Im just a message away.
+              </p>
+              <form onSubmit={handleSubmit}>
+                <div style={styles.inputGroup}>
+                  <FaUser style={styles.inputIcon} />
+                  <input
+                    type="text"
+                    name="name"
+                    placeholder="Your Name"
+                    className="form-control"
+                    style={{
+                      ...styles.input,
+                      ...(formState.isFocused.name ? styles.inputFocus : {})
+                    }}
+                    value={formData.name}
+                    onChange={handleChange}
+                    onFocus={() => setFormState(prev => ({ 
+                      ...prev, 
+                      isFocused: { ...prev.isFocused, name: true } 
+                    }))}
+                    onBlur={() => setFormState(prev => ({ 
+                      ...prev, 
+                      isFocused: { ...prev.isFocused, name: false } 
+                    }))}
+                  />
+                </div>
 
-          <div className="form-group">
-            <label
-              className={`form-label ${
-                formState.isFocused.email ? 'label-focused' : ''
-              }`}
-            >
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              onFocus={() => handleFocus('email')}
-              onBlur={() => handleBlur('email')}
-              className={`form-input ${
-                formState.isFocused.email
-                  ? 'input-focused'
-                  : formState.isValid.email === false
-                  ? 'input-invalid'
-                  : ''
-              }`}
-              required
-            />
-          </div>
+                <div style={styles.inputGroup}>
+                  <FaEnvelope style={styles.inputIcon} />
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="Your Email"
+                    className="form-control"
+                    style={{
+                      ...styles.input,
+                      ...(formState.isFocused.email ? styles.inputFocus : {})
+                    }}
+                    value={formData.email}
+                    onChange={handleChange}
+                    onFocus={() => setFormState(prev => ({ 
+                      ...prev, 
+                      isFocused: { ...prev.isFocused, email: true } 
+                    }))}
+                    onBlur={() => setFormState(prev => ({ 
+                      ...prev, 
+                      isFocused: { ...prev.isFocused, email: false } 
+                    }))}
+                  />
+                </div>
 
-          <div className="form-group">
-            <label
-              className={`form-label ${
-                formState.isFocused.message ? 'label-focused' : ''
-              }`}
-            >
-              Message
-            </label>
-            <textarea
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              onFocus={() => handleFocus('message')}
-              onBlur={() => handleBlur('message')}
-              className={`form-input form-textarea ${
-                formState.isFocused.message
-                  ? 'input-focused'
-                  : formState.isValid.message === false
-                  ? 'input-invalid'
-                  : ''
-              }`}
-              rows="4"
-              required
-            ></textarea>
-          </div>
+                <div style={styles.inputGroup}>
+                  <FaComment style={styles.inputIcon} />
+                  <textarea
+                    name="message"
+                    placeholder="Your Message"
+                    className="form-control"
+                    rows="4"
+                    style={{
+                      ...styles.input,
+                      ...(formState.isFocused.message ? styles.inputFocus : {})
+                    }}
+                    value={formData.message}
+                    onChange={handleChange}
+                    onFocus={() => setFormState(prev => ({ 
+                      ...prev, 
+                      isFocused: { ...prev.isFocused, message: true } 
+                    }))}
+                    onBlur={() => setFormState(prev => ({ 
+                      ...prev, 
+                      isFocused: { ...prev.isFocused, message: false } 
+                    }))}
+                  ></textarea>
+                </div>
 
-          <button type="submit" className="submit-button">
-            Send Message
-          </button>
-        </form>
-        <div className="social-links">
-          <a href="https://wa.me/+123456789" target="_blank" rel="noopener noreferrer">
-            <i className="fab fa-whatsapp"></i>
-          </a>
-          <a href="https://instagram.com/your_username" target="_blank" rel="noopener noreferrer">
-            <i className="fab fa-instagram"></i>
-          </a>
-          <a href="https://linkedin.com/in/your_username" target="_blank" rel="noopener noreferrer">
-            <i className="fab fa-linkedin-in"></i>
-          </a>
-          <a href="https://t.me/your_username" target="_blank" rel="noopener noreferrer">
-            <i className="fab fa-telegram"></i>
-          </a>
+                <button 
+                  type="submit" 
+                  className="btn w-100"
+                  style={styles.submitButton}
+                  disabled={formState.isSubmitting}
+                >
+                  {formState.isSubmitting ? 'Sending...' : 'Send Message'}
+                  <FaPaperPlane className="ms-2" />
+                </button>
+              </form>
+
+              <div style={styles.socialLinks}>
+                {socialLinks.map(({ name, href, icon: Icon }) => (
+                  <a
+                    key={name}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={styles.socialIcon}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = styles.socialIconHover.transform;
+                      e.currentTarget.style.color = styles.socialIconHover.color;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'none';
+                      e.currentTarget.style.color = styles.socialIcon.color;
+                    }}
+                  >
+                    <Icon size={24} />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="map">
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15274.362455431207!2d79.56935457499999!3d14.153722550000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bb63e9eb9d5ffe5%3A0x16a01c3d5e9e2cf8!2sAravind%2C%20Tenali%2C%20Andhra%20Pradesh!5e0!3m2!1sen!2sin!4v1684177546907!5m2!1sen!2sin"
-          allowFullScreen=""
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-        ></iframe>
       </div>
     </div>
   );
